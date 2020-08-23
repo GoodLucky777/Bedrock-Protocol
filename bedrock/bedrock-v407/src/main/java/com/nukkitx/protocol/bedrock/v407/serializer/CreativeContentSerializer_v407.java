@@ -9,33 +9,32 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreativeContentSerializer_v407 implements BedrockPacketSerializer<CreativeContentPacket> {
 
     public static final CreativeContentSerializer_v407 INSTANCE = new CreativeContentSerializer_v407();
 
+    private static final ItemData[] EMPTY = new ItemData[0];
+
     @Override
     public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CreativeContentPacket packet) {
-        VarInts.writeUnsignedInt(buffer, packet.getEntries().size());
-        for (Map.Entry<Integer, ItemData> entry : packet.getEntries().entrySet()) {
-            VarInts.writeInt(buffer, entry.getKey());
-            helper.writeItem(buffer, entry.getValue());
-        }
+        helper.writeArray(buffer, packet.getContents(), this::writeCreativeItem);
     }
 
     @Override
     public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, CreativeContentPacket packet) {
-        Map<Integer, ItemData> entries = packet.getEntries();
+        packet.setContents(helper.readArray(buffer, EMPTY, this::readCreativeItem));
+    }
 
-        int count = VarInts.readUnsignedInt(buffer);
-        for (int i = 0; i < count; i++) {
-            int creativeNetId = VarInts.readInt(buffer);
-            ItemData item = helper.readItem(buffer);
-            if (entries.putIfAbsent(creativeNetId, item) != null) {
-                throw new IllegalStateException("Creative content net ID collision!");
-            }
-        }
+    protected ItemData readCreativeItem(ByteBuf buffer, BedrockPacketHelper helper) {
+        int netId = VarInts.readUnsignedInt(buffer);
+        ItemData item = helper.readItem(buffer);
+        item.setNetId(netId);
+        return item;
+    }
+
+    protected void writeCreativeItem(ByteBuf buffer, BedrockPacketHelper helper, ItemData item) {
+        VarInts.writeUnsignedInt(buffer, item.getNetId());
+        helper.writeItem(buffer, item);
     }
 }
