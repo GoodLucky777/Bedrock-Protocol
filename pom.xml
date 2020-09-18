@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.nukkitx.protocol</groupId>
+    <groupId>org.powernukkit.bedrock.protocol</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.6.0-SNAPSHOT</version>
+    <version>2.6.0-PN-SNAPSHOT</version>
     <name>Protocol Parent</name>
     <description>A protocol library for Minecraft</description>
-    <url>https://github.com/NukkitX/Protocol</url>
+    <url>https://github.com/PowerNukkit/Bedrock-Protocol</url>
     <inceptionYear>2018</inceptionYear>
 
     <modules>
@@ -27,36 +27,31 @@
     </licenses>
 
     <organization>
-        <name>NukkitX</name>
-        <url>https://github.com/NukkitX</url>
+        <name>PowerNukkit</name>
+        <url>https://github.com/PowerNukkit</url>
     </organization>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/NukkitX/Protocol/issues</url>
+        <url>https://github.com/PowerNukkit/Bedrock-Protocol/issues</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>https://ci.nukkitx.com/job/NukkitX/job/Protocol</url>
-    </ciManagement>
-
     <scm>
-        <connection>scm:git:https://github.com/NukkitX/Protocol.git</connection>
-        <developerConnection>scm:git:git@github.com:NukkitX/Protocol.git</developerConnection>
-        <url>https://github.com/NukkitX/Protocol</url>
+        <connection>scm:git:https://github.com/PowerNukkit/Bedrock-Protocol.git</connection>
+        <developerConnection>scm:git:git@github.com:PowerNukkit/Bedrock-Protocol.git</developerConnection>
+        <url>https://github.com/PowerNukkit/Bedrock-Protocol</url>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>releases</id>
-            <name>nukkitx-releases</name>
-            <url>https://repo.nukkitx.com/release</url>
+            <id>powernukkit-releases</id>
+            <name>powernukkit-releases</name>
+            <url>https://api.bintray.com/maven/powernukkit/powernukkit/bedrock-protocol</url>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
-            <name>nukkitx-snapshots</name>
-            <url>https://repo.nukkitx.com/snapshot</url>
+            <id>powernukkit-snapshots</id>
+            <name>powernukkit-snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -65,8 +60,30 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>HHmm-ddMMyyyy</maven.build.timestamp.format>
-        <network.version>1.6.20</network.version>
+        <network.version>1.6.20-PN-SNAPSHOT</network.version>
     </properties>
+
+    <developers>
+        <developer>
+            <id>PowerNukkit</id>
+            <url>https://powernukkit.org</url>
+            <organization>PowerNukkit</organization>
+            <organizationUrl>https://github.com/PowerNukkit</organizationUrl>
+        </developer>
+        <developer>
+            <id>CloudburstMC</id>
+            <url>https://cloudburstmc.org</url>
+            <organization>CloudburstMC</organization>
+            <organizationUrl>https://github.com/CloudburstMC</organizationUrl>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>PowerNukkit Bedrock Protocol contributors</name>
+            <url>https://github.com/PowerNukkit/Bedrock-Protocol/graphs/contributors</url>
+        </contributor>
+    </contributors>
 
     <repositories>
         <repository>
@@ -135,6 +152,37 @@
                         <link>https://ci.nukkitx.com/job/NukkitX/job/math/job/master/javadoc</link>
                     </links>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
             </plugin>
         </plugins>
     </build>
