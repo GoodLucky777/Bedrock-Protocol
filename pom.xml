@@ -34,7 +34,7 @@
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/PowerNukkit/Bedrock-Protocol/issues</url>
-    </issueManagement>
+    </issueManagement> 
 
     <scm>
         <connection>scm:git:https://github.com/PowerNukkit/Bedrock-Protocol.git</connection>
