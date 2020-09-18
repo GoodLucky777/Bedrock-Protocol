@@ -2,7 +2,6 @@ package com.nukkitx.protocol.bedrock.packet;
 
 import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.data.AttributeData;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
@@ -10,19 +9,28 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+/**
+ * Tracks the current fog effects applied to a client
+ */
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class UpdateAttributesPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private List<AttributeData> attributes = new ObjectArrayList<>();
-    private long tick;
+public class PlayerFogPacket extends BedrockPacket {
+
+    /**
+     * Fog stack containing fog effects from the /fog command
+     *
+     * @param fogStack list of fog effects
+     * @return list of fog effects
+     */
+    private final List<String> fogStack = new ObjectArrayList<>();
 
     @Override
-    public final boolean handle(BedrockPacketHandler handler) {
+    public boolean handle(BedrockPacketHandler handler) {
         return handler.handle(this);
     }
 
+    @Override
     public BedrockPacketType getPacketType() {
-        return BedrockPacketType.UPDATE_ATTRIBUTES;
+        return BedrockPacketType.PLAYER_FOG;
     }
 }
