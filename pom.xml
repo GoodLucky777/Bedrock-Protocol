@@ -87,6 +87,17 @@
 
     <repositories>
         <repository>
+            <id>powernukkit-snapshots</id>
+            <name>powernukkit-snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>nukkitx-repo-release</id>
             <url>https://repo.nukkitx.com/maven-releases/</url>
             <releases>
