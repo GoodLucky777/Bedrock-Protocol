@@ -60,7 +60,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>HHmm-ddMMyyyy</maven.build.timestamp.format>
-        <network.version>1.6.20-PN-SNAPSHOT</network.version>
+        <network.version>1.6.22-PN-SNAPSHOT</network.version>
     </properties>
 
     <developers>
@@ -98,8 +98,8 @@
             </snapshots>
         </repository>
         <repository>
-            <id>nukkitx-repo-release</id>
-            <url>https://repo.nukkitx.com/maven-releases/</url>
+            <id>opencollab-repo-release</id>
+            <url>https://repo.opencollab.dev/maven-releases/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -108,8 +108,8 @@
             </snapshots>
         </repository>
         <repository>
-            <id>nukkitx-repo-snapshot</id>
-            <url>https://repo.nukkitx.com/maven-snapshots/</url>
+            <id>opencollab-repo-snapshot</id>
+            <url>https://repo.opencollab.dev/maven-snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>

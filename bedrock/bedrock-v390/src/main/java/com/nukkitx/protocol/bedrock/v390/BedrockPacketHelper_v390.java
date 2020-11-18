@@ -1,7 +1,7 @@
 package com.nukkitx.protocol.bedrock.v390;
 
 import com.nukkitx.protocol.bedrock.data.skin.*;
-import com.nukkitx.protocol.bedrock.v388.BedrockPacketHelper_v388;
+import com.nukkitx.protocol.bedrock.v389.BedrockPacketHelper_v389;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
@@ -12,7 +12,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class BedrockPacketHelper_v390 extends BedrockPacketHelper_v388 {
+public class BedrockPacketHelper_v390 extends BedrockPacketHelper_v389 {
     public static final BedrockPacketHelper_v390 INSTANCE = new BedrockPacketHelper_v390();
 
     @Override
@@ -24,10 +24,7 @@ public class BedrockPacketHelper_v390 extends BedrockPacketHelper_v388 {
         int animationCount = buffer.readIntLE();
         List<AnimationData> animations = new ObjectArrayList<>(animationCount);
         for (int i = 0; i < animationCount; i++) {
-            ImageData image = this.readImage(buffer);
-            int type = buffer.readIntLE();
-            float frames = buffer.readFloatLE();
-            animations.add(new AnimationData(image, type, frames));
+            animations.add(this.readAnimationData(buffer));
         }
 
         ImageData capeData = this.readImage(buffer);
@@ -79,9 +76,7 @@ public class BedrockPacketHelper_v390 extends BedrockPacketHelper_v388 {
         List<AnimationData> animations = skin.getAnimations();
         buffer.writeIntLE(animations.size());
         for (AnimationData animation : animations) {
-            this.writeImage(buffer, animation.getImage());
-            buffer.writeIntLE(animation.getType());
-            buffer.writeFloatLE(animation.getFrames());
+            this.writeAnimationData(buffer, animation);
         }
 
         this.writeImage(buffer, skin.getCapeData());

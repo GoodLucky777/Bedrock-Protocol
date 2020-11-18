@@ -621,7 +621,7 @@ public interface BedrockPacketHandler extends PacketHandler {
         return false;
     }
 
-    default boolean handle(SetEntityMotionPlusPacket packet) {
+    default boolean handle(MotionPredictionHintsPacket packet) {
         return false;
     }
 
@@ -638,6 +638,10 @@ public interface BedrockPacketHandler extends PacketHandler {
     }
 
     default boolean handle(PlayerFogPacket packet) {
+        return false;
+    }
+
+    default boolean handle(ItemComponentPacket packet) {
         return false;
     }
 }

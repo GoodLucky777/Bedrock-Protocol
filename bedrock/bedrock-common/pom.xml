@@ -16,13 +16,11 @@
             <groupId>org.powernukkit.bedrock.protocol</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.powernukkit.bedrock.network</groupId>
             <artifactId>raknet</artifactId>
             <version>${network.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
@@ -34,13 +32,11 @@
             <groupId>com.nukkitx.fastutil</groupId>
             <artifactId>fastutil-long-common</artifactId>
             <version>8.3.1</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.nukkitx.fastutil</groupId>
             <artifactId>fastutil-long-object-maps</artifactId>
             <version>8.3.1</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

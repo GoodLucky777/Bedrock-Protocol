@@ -29,7 +29,7 @@ public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
             for (BedrockPacket packet : packets) {
                 ByteBuf packetBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
                 try {
-                    int id = codec.getId(packet.getClass());
+                    int id = codec.getId(packet);
                     int header = 0;
                     header |= (id & 0x3ff);
                     header |= (packet.getSenderId() & 3) << 10;
@@ -71,6 +71,7 @@ public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
                     int header = VarInts.readUnsignedInt(packetBuffer);
                     int packetId = header & 0x3ff;
                     BedrockPacket packet = codec.tryDecode(packetBuffer, packetId);
+                    packet.setPacketId(packetId);
                     packet.setSenderId((header >>> 10) & 3);
                     packet.setClientId((header >>> 12) & 3);
                     packets.add(packet);

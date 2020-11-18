@@ -6,6 +6,7 @@ import com.nukkitx.protocol.bedrock.data.SoundEvent;
 import com.nukkitx.protocol.bedrock.data.entity.EntityData;
 import com.nukkitx.protocol.bedrock.data.entity.EntityEventType;
 import com.nukkitx.protocol.bedrock.data.entity.EntityFlag;
+import com.nukkitx.protocol.bedrock.data.skin.AnimatedTextureType;
 import com.nukkitx.protocol.bedrock.data.skin.AnimationData;
 import com.nukkitx.protocol.bedrock.data.skin.ImageData;
 import com.nukkitx.protocol.bedrock.data.skin.SerializedSkin;
@@ -17,11 +18,14 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.nukkitx.protocol.bedrock.data.command.CommandParamType.*;
 import static java.util.Objects.requireNonNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class BedrockPacketHelper_v388 extends BedrockPacketHelper_v361 {
     public static final BedrockPacketHelper_v388 INSTANCE = new BedrockPacketHelper_v388();
+
+    protected static final AnimatedTextureType[] TEXTURE_TYPES = AnimatedTextureType.values();
 
     @Override
     protected void registerEntityData() {
@@ -43,6 +47,25 @@ public class BedrockPacketHelper_v388 extends BedrockPacketHelper_v361 {
         this.addEntityFlag(89, EntityFlag.STALKING);
         this.addEntityFlag(90, EntityFlag.EMOTING);
         this.addEntityFlag(91, EntityFlag.CELEBRATING);
+    }
+
+    @Override
+    protected void registerCommandParams() {
+        this.addCommandParam(1, INT);
+        this.addCommandParam(2, FLOAT);
+        this.addCommandParam(3, VALUE);
+        this.addCommandParam(4, WILDCARD_INT);
+        this.addCommandParam(5, OPERATOR);
+        this.addCommandParam(6, TARGET);
+        this.addCommandParam(7, WILDCARD_TARGET);
+        this.addCommandParam(14, FILE_PATH);
+        this.addCommandParam(29, STRING);
+        this.addCommandParam(37, BLOCK_POSITION);
+        this.addCommandParam(38, POSITION);
+        this.addCommandParam(41, MESSAGE);
+        this.addCommandParam(43, TEXT);
+        this.addCommandParam(47, JSON);
+        this.addCommandParam(54, COMMAND);
     }
 
     @Override
@@ -103,10 +126,7 @@ public class BedrockPacketHelper_v388 extends BedrockPacketHelper_v361 {
         int animationCount = buffer.readIntLE();
         List<AnimationData> animations = new ObjectArrayList<>(animationCount);
         for (int i = 0; i < animationCount; i++) {
-            ImageData image = this.readImage(buffer);
-            int type = buffer.readIntLE();
-            float frames = buffer.readFloatLE();
-            animations.add(new AnimationData(image, type, frames));
+            animations.add(this.readAnimationData(buffer));
         }
 
         ImageData capeData = this.readImage(buffer);
@@ -133,9 +153,7 @@ public class BedrockPacketHelper_v388 extends BedrockPacketHelper_v361 {
         List<AnimationData> animations = skin.getAnimations();
         buffer.writeIntLE(animations.size());
         for (AnimationData animation : animations) {
-            this.writeImage(buffer, animation.getImage());
-            buffer.writeIntLE(animation.getType());
-            buffer.writeFloatLE(animation.getFrames());
+            this.writeAnimationData(buffer, animation);
         }
 
         this.writeImage(buffer, skin.getCapeData());
@@ -146,6 +164,21 @@ public class BedrockPacketHelper_v388 extends BedrockPacketHelper_v361 {
         buffer.writeBoolean(skin.isCapeOnClassic());
         this.writeString(buffer, skin.getCapeId());
         this.writeString(buffer, skin.getFullSkinId());
+    }
+
+    @Override
+    public AnimationData readAnimationData(ByteBuf buffer) {
+        ImageData image = this.readImage(buffer);
+        AnimatedTextureType type = TEXTURE_TYPES[buffer.readIntLE()];
+        float frames = buffer.readFloatLE();
+        return new AnimationData(image, type, frames);
+    }
+
+    @Override
+    public void writeAnimationData(ByteBuf buffer, AnimationData animation) {
+        this.writeImage(buffer, animation.getImage());
+        buffer.writeIntLE(animation.getTextureType().ordinal());
+        buffer.writeFloatLE(animation.getFrames());
     }
 
     @Override

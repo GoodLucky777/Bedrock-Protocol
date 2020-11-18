@@ -1,4 +1,4 @@
-package com.nukkitx.protocol.bedrock.v414.serializer;
+package com.nukkitx.protocol.bedrock.v419.serializer;
 
 import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.network.VarInts;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 
 @SuppressWarnings("DuplicatedCode")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StartGameSerializer_v414 implements BedrockPacketSerializer<StartGamePacket> {
+public class StartGameSerializer_v419 implements BedrockPacketSerializer<StartGamePacket> {
 
-    public static final StartGameSerializer_v414 INSTANCE = new StartGameSerializer_v414();
+    public static final StartGameSerializer_v419 INSTANCE = new StartGameSerializer_v419();
 
     protected static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
     protected static final AuthoritativeMovementMode[] MOVEMENT_MODES = AuthoritativeMovementMode.values();
@@ -45,6 +45,7 @@ public class StartGameSerializer_v414 implements BedrockPacketSerializer<StartGa
         helper.writeArray(buffer, packet.getItemEntries(), (buf, packetHelper, entry) -> {
             packetHelper.writeString(buf, entry.getIdentifier());
             buf.writeShortLE(entry.getId());
+            buf.writeBoolean(entry.isComponentBased());
         });
 
         helper.writeString(buffer, packet.getMultiplayerCorrelationId());
@@ -78,7 +79,8 @@ public class StartGameSerializer_v414 implements BedrockPacketSerializer<StartGa
         helper.readArray(buffer, packet.getItemEntries(), (buf, packetHelper) -> {
             String identifier = packetHelper.readString(buf);
             short id = buf.readShortLE();
-            return new StartGamePacket.ItemEntry(identifier, id);
+            boolean componentBased = buf.readBoolean();
+            return new StartGamePacket.ItemEntry(identifier, id, componentBased);
         });
 
         packet.setMultiplayerCorrelationId(helper.readString(buffer));
@@ -127,6 +129,9 @@ public class StartGameSerializer_v414 implements BedrockPacketSerializer<StartGa
         buffer.writeIntLE(packet.getLimitedWorldHeight());
         buffer.writeBoolean(packet.isNetherType());
         buffer.writeBoolean(packet.isForceExperimentalGameplay());
+        if (packet.isForceExperimentalGameplay()) {
+            buffer.writeBoolean(true); // optional boolean
+        }
     }
 
     protected void readLevelSettings(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -170,6 +175,8 @@ public class StartGameSerializer_v414 implements BedrockPacketSerializer<StartGa
         packet.setLimitedWorldWidth(buffer.readIntLE());
         packet.setLimitedWorldHeight(buffer.readIntLE());
         packet.setNetherType(buffer.readBoolean());
-        packet.setForceExperimentalGameplay(buffer.readBoolean());
+        if (buffer.readBoolean()) { // optional boolean
+            packet.setForceExperimentalGameplay(buffer.readBoolean());
+        }
     }
 }
