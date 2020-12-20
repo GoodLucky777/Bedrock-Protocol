@@ -30,6 +30,7 @@ import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.zip.Deflater;
@@ -54,6 +55,8 @@ public abstract class BedrockSession implements MinecraftSession<BedrockPacket> 
     private int compressionLevel = Deflater.DEFAULT_COMPRESSION;
     private volatile boolean closed = false;
     private volatile boolean logging = true;
+
+    private AtomicInteger hardcodedBlockingId = new AtomicInteger(-1);
 
     static {
         // Required for Android API versions prior to 26.
@@ -115,7 +118,7 @@ public abstract class BedrockSession implements MinecraftSession<BedrockPacket> 
     public void sendWrapped(Collection<BedrockPacket> packets, boolean encrypt) {
         ByteBuf compressed = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            this.wrapperSerializer.serialize(compressed, this.packetCodec, packets, this.compressionLevel);
+            this.wrapperSerializer.serialize(compressed, this.packetCodec, packets, this.compressionLevel, this);
             this.sendWrapped(compressed, encrypt);
         } catch (Exception e) {
             log.error("Unable to compress packets", e);
@@ -280,7 +283,7 @@ public abstract class BedrockSession implements MinecraftSession<BedrockPacket> 
             batched.markReaderIndex();
 
             List<BedrockPacket> packets = new ObjectArrayList<>();
-            this.wrapperSerializer.deserialize(batched, this.packetCodec, packets);
+            this.wrapperSerializer.deserialize(batched, this.packetCodec, packets, this);
 
             this.batchHandler.handle(this, batched, packets);
         } catch (GeneralSecurityException ignore) {
@@ -336,6 +339,10 @@ public abstract class BedrockSession implements MinecraftSession<BedrockPacket> 
     public void addDisconnectHandler(Consumer<DisconnectReason> disconnectHandler) {
         Objects.requireNonNull(disconnectHandler, "disconnectHandler");
         this.disconnectHandlers.add(disconnectHandler);
+    }
+
+    public AtomicInteger getHardcodedBlockingId() {
+        return this.hardcodedBlockingId;
     }
 
     @Override

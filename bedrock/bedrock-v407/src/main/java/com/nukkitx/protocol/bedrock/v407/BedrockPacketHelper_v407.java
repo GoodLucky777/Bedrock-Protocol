@@ -2,12 +2,15 @@ package com.nukkitx.protocol.bedrock.v407;
 
 import com.nukkitx.network.VarInts;
 import com.nukkitx.network.util.Preconditions;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockSession;
 import com.nukkitx.protocol.bedrock.data.LevelEventType;
 import com.nukkitx.protocol.bedrock.data.SoundEvent;
 import com.nukkitx.protocol.bedrock.data.entity.EntityData;
 import com.nukkitx.protocol.bedrock.data.entity.EntityFlag;
 import com.nukkitx.protocol.bedrock.data.entity.EntityLinkData;
 import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
+import com.nukkitx.protocol.bedrock.packet.ItemStackResponsePacket;
 import com.nukkitx.protocol.bedrock.v390.BedrockPacketHelper_v390;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
@@ -130,16 +133,16 @@ public class BedrockPacketHelper_v407 extends BedrockPacketHelper_v390 {
     }
 
     @Override
-    public ItemData readNetItem(ByteBuf buffer) {
+    public ItemData readNetItem(ByteBuf buffer, BedrockSession session) {
         int netId = VarInts.readInt(buffer);
-        ItemData item = this.readItem(buffer);
+        ItemData item = this.readItem(buffer, session);
         item.setNetId(netId);
         return item;
     }
 
     @Override
-    public void writeNetItem(ByteBuf buffer, ItemData item) {
+    public void writeNetItem(ByteBuf buffer, ItemData item, BedrockSession session) {
         VarInts.writeInt(buffer, item.getNetId());
-        this.writeItem(buffer, item);
+        this.writeItem(buffer, item, session);
     }
 }

@@ -18,6 +18,7 @@ import com.nukkitx.protocol.bedrock.data.skin.AnimationData;
 import com.nukkitx.protocol.bedrock.data.skin.ImageData;
 import com.nukkitx.protocol.bedrock.data.skin.SerializedSkin;
 import com.nukkitx.protocol.bedrock.data.structure.StructureSettings;
+import com.nukkitx.protocol.bedrock.packet.ItemStackResponsePacket;
 import com.nukkitx.protocol.bedrock.util.TriConsumer;
 import com.nukkitx.protocol.util.Int2ObjectBiMap;
 import io.netty.buffer.ByteBuf;
@@ -196,13 +197,13 @@ public abstract class BedrockPacketHelper {
 
     public abstract void writeEntityLink(ByteBuf buffer, EntityLinkData link);
 
-    public abstract ItemData readNetItem(ByteBuf buffer);
+    public abstract ItemData readNetItem(ByteBuf buffer, BedrockSession session);
 
-    public abstract void writeNetItem(ByteBuf buffer, ItemData item);
+    public abstract void writeNetItem(ByteBuf buffer, ItemData item, BedrockSession session);
 
-    public abstract ItemData readItem(ByteBuf buffer);
+    public abstract ItemData readItem(ByteBuf buffer, BedrockSession session);
 
-    public abstract void writeItem(ByteBuf buffer, ItemData item);
+    public abstract void writeItem(ByteBuf buffer, ItemData item, BedrockSession session);
 
     public abstract CommandOriginData readCommandOrigin(ByteBuf buffer);
 
@@ -618,10 +619,11 @@ public abstract class BedrockPacketHelper {
      * Only a shield should return true
      *
      * @param id ID of item
+     * @param lookFor ID to match
      * @return true if reading/writing blockingticks
      */
-    public boolean isBlockingItem(int id) {
-        return false;
+    public boolean isBlockingItem(int id, int lookFor) {
+        return id == lookFor;
     }
 
     public void readExperiments(ByteBuf buffer, List<ExperimentData> experiments) {

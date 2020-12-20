@@ -30,12 +30,7 @@ public class ItemStackResponseSerializer_v407 implements BedrockPacketSerializer
             helper.writeArray(buf, response.getContainers(), (buf2, containerEntry) -> {
                 buf2.writeByte(containerEntry.getContainer().ordinal());
 
-                helper.writeArray(buf2, containerEntry.getItems(), (byteBuf, itemEntry) -> {
-                    byteBuf.writeByte(itemEntry.getSlot());
-                    byteBuf.writeByte(itemEntry.getHotbarSlot());
-                    byteBuf.writeByte(itemEntry.getCount());
-                    VarInts.writeInt(byteBuf, itemEntry.getStackNetworkId());
-                });
+                helper.writeArray(buf2, containerEntry.getItems(), this::writeItemEntry);
             });
         });
     }
@@ -55,15 +50,26 @@ public class ItemStackResponseSerializer_v407 implements BedrockPacketSerializer
                 ContainerSlotType container = ContainerSlotType.values()[buf2.readByte()];
 
                 List<ItemStackResponsePacket.ItemEntry> itemEntries = new ArrayList<>();
-                helper.readArray(buf2, itemEntries, byteBuf -> new ItemStackResponsePacket.ItemEntry(
-                        byteBuf.readByte(),
-                        byteBuf.readByte(),
-                        byteBuf.readByte(),
-                        VarInts.readInt(byteBuf)
-                ));
+                helper.readArray(buf2, itemEntries, byteBuf -> this.readItemEntry(byteBuf, helper));
                 return new ItemStackResponsePacket.ContainerEntry(container, itemEntries);
             });
             return new ItemStackResponsePacket.Response(success, requestId, containerEntries);
         });
+    }
+
+    protected ItemStackResponsePacket.ItemEntry readItemEntry(ByteBuf buffer, BedrockPacketHelper helper) {
+        return new ItemStackResponsePacket.ItemEntry(
+                buffer.readByte(),
+                buffer.readByte(),
+                buffer.readByte(),
+                VarInts.readInt(buffer),
+                "");
+    }
+
+    protected void writeItemEntry(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket.ItemEntry itemEntry) {
+        buffer.writeByte(itemEntry.getSlot());
+        buffer.writeByte(itemEntry.getHotbarSlot());
+        buffer.writeByte(itemEntry.getCount());
+        VarInts.writeInt(buffer, itemEntry.getStackNetworkId());
     }
 }
