@@ -18,6 +18,7 @@ import com.nukkitx.protocol.bedrock.v390.serializer.PlayerSkinSerializer_v390;
 import com.nukkitx.protocol.bedrock.v407.serializer.*;
 import com.nukkitx.protocol.bedrock.v419.BedrockPacketHelper_v419;
 import com.nukkitx.protocol.bedrock.v419.serializer.*;
+import com.nukkitx.protocol.bedrock.v422.serializer.CraftingDataSerializer_v422;
 import com.nukkitx.protocol.bedrock.v422.serializer.FilterTextSerializer_v422;
 import com.nukkitx.protocol.bedrock.v422.serializer.ItemStackResponseSerializer_v422;
 import com.nukkitx.protocol.bedrock.v422.serializer.ResourcePacksInfoSerializer_v422;
@@ -79,7 +80,7 @@ public class Bedrock_v422 {
             .registerPacket(InventoryContentPacket.class, InventoryContentSerializer_v407.INSTANCE, 49)
             .registerPacket(InventorySlotPacket.class, InventorySlotSerializer_v407.INSTANCE, 50)
             .registerPacket(ContainerSetDataPacket.class, ContainerSetDataSerializer_v291.INSTANCE, 51)
-            .registerPacket(CraftingDataPacket.class, CraftingDataSerializer_v407.INSTANCE, 52)
+            .registerPacket(CraftingDataPacket.class, CraftingDataSerializer_v422.INSTANCE, 52)
             .registerPacket(CraftingEventPacket.class, CraftingEventSerializer_v291.INSTANCE, 53)
             .registerPacket(GuiDataPickItemPacket.class, GuiDataPickItemSerializer_v291.INSTANCE, 54)
             .registerPacket(AdventureSettingsPacket.class, AdventureSettingsSerializer_v291.INSTANCE, 55)
