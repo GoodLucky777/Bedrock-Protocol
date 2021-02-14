@@ -9,4 +9,8 @@ import java.util.Collection;
 public interface BatchHandler {
 
     void handle(BedrockSession session, ByteBuf compressed, Collection<BedrockPacket> packets);
+    
+    default void unbufferedHandler(BedrockSession session, BedrockPacket packet) {
+        // Does nothing by default
+    }
 }

@@ -76,6 +76,7 @@ public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
                     packet.setSenderId((header >>> 10) & 3);
                     packet.setClientId((header >>> 12) & 3);
                     packets.add(packet);
+                    session.getBatchHandler().unbufferedHandler(session, packet);
                 } catch (PacketSerializeException e) {
                     log.debug("Error occurred whilst decoding packet", e);
                     if (log.isTraceEnabled()) {
