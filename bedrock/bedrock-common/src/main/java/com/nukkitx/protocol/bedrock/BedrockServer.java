@@ -51,7 +51,7 @@ public class BedrockServer extends Bedrock {
     }
 
     @Override
-    public void close() {
+    public void close(boolean force) {
         this.close("disconnect.disconnected");
     }
 
@@ -60,6 +60,7 @@ public class BedrockServer extends Bedrock {
             session.disconnect(reason);
         }
         this.rakNetServer.close();
+        this.tickFuture.cancel(false);
     }
 
     public boolean isClosed() {
