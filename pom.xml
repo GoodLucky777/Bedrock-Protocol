@@ -7,7 +7,7 @@
     <groupId>org.powernukkit.bedrock.protocol</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.6.1-PN-SNAPSHOT</version>
+    <version>2.6.3-PN-SNAPSHOT</version>
     <name>Protocol Parent</name>
     <description>A protocol library for Minecraft</description>
     <url>https://github.com/PowerNukkit/Bedrock-Protocol</url>
@@ -198,3 +198,4 @@
         </plugins>
     </build>
 </project>
+
